@@ -10,28 +10,43 @@
   <body>
     <main class="container">
       <h1>Draw</h1>
-      <h2>Prompt: <strong>{{prompt}}</strong></h2>
+      <h2 class="prompt">Prompt: <strong>{{prompt}}</strong></h2>
       <div class="drawing-ui">
         <div class="palette">
-          <!-- Drawing Buttons -->
+          <!-- Color Palette Buttons -->
           {% for color in palette %}
-          <button style="--color: {{color}}"></button>
+          <button
+            style="--color: {{color}}"
+            onclick="setColor('{{color}}')"
+          ></button>
           {% endfor %}
         </div>
-        <canvas id="drawingCanvas" width="32" height="32">
-          <!-- Drawing Canvas -->
-          Canvas Failed to Load
-        </canvas>
+        <div class="canvas-container">
+          <canvas id="drawingCanvas" width="4" height="4">
+            <!-- Drawing Canvas -->
+            Canvas Failed to Load
+          </canvas>
+          <p class="pixel-font" id="canvasDetails">X Y W H</p>
+        </div>
         <div class="toolbar">
           <!-- Drawing Buttons -->
-          <button></button>
-          <button></button>
-          <button></button>
-          <button></button>
-          <button></button>
+          <button onclick="setTool(0)">Draw</button>
+          <button onclick="setTool(1)">Erase</button>
+          <button onclick="setTool(2)">Fill</button>
+          <button onclick="setTool(3)">Move</button>
+          <button onclick="setTool(4)">Select</button>
+          <button onclick="undo()">Undo</button>
+          <button onclick="redo()">Redo</button>
         </div>
       </div>
+      <form class="art-form" action="/submit-art" method="POST">
+        <input id="imageData" type="hidden" name="image_data[]" value="0" />
+        <button type="submit" class="submit-art">Submit Art!</button>
+      </form>
     </main>
+    <script>
+      const palette = {{palette | tojson}};
+    </script>
     <script src="/static/scripts/draw.js"></script>
   </body>
 </html>

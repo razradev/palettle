@@ -17,7 +17,8 @@
 
 h1,
 h2,
-h3 {
+h3,
+.pixel-font {
   font-family: var(--font-display);
   font-weight: normal;
   letter-spacing: 0;
@@ -35,18 +36,22 @@ h3 {
   font-size: 22px;
 }
 
-#drawingCanvas {
-  background-color: lightgray;
-  width: 100%;
-  max-width: 32rem;
-  aspect-ratio: 1 / 1;
-  image-rendering: pixelated;
+.prompt {
+  text-align: center;
 }
 
 .drawing-ui {
   display: flex;
   gap: var(--pico-spacing);
+  align-self: stretch;
   justify-content: center;
+}
+
+.canvas-container {
+  display: flex;
+  flex: 1;
+  max-width: 32rem;
+  flex-direction: column;
 }
 
 .toolbar,
@@ -57,13 +62,39 @@ h3 {
 }
 
 .toolbar button {
-  min-width: 2rem;
+  width: 2rem;
+  text-overflow: clip;
+  text-wrap-mode: nowrap;
   aspect-ratio: 1 / 1;
 }
 
 .palette button {
-  min-width: 2rem;
+  width: 2rem;
   aspect-ratio: 1 / 1;
   border-color: color-mix(var(--color) 75%, white);
   background-color: var(--color);
+}
+
+.art-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.submit-art {
+  width: max-content !important;
+}
+
+#drawingCanvas {
+  background-color: #cad9e8;
+  width: 100%;
+  max-width: 32rem;
+  max-height: 32rem;
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
+  image-rendering: pixelated;
+}
+
+#canvasDetails {
+  font-size: 11px;
 }
