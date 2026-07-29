@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery</title>
+    <link rel="stylesheet" href="/static/styles/pico.min.css" />
+    <link rel="stylesheet" href="/static/styles/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Gallery</h1>
+      <div class="gallery-canvas-container">
+        {% for a in art %}
+        <a href="/art/{{a.author}}"
+          ><canvas class="gallery-canvas" id="{{a.author}}"
+            >{{a.image_data}}</canvas
+          ></a
+        >
+        {% endfor %}
+      </div>
+    </main>
+    <script>
+      const palette = {{palette | tojson}};
+      const art = {{art | tojson}};
+    </script>
+    <script src="/static/scripts/constants.js"></script>
+    <script src="/static/scripts/palette.js"></script>
+    <script src="/static/scripts/gallery.js"></script>
+  </body>
+</html>

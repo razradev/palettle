@@ -13,6 +13,8 @@
   --font-default: "Inter", system-ui, sans-serif;
 
   --pico-font-family: var(--font-default);
+
+  --canvas-background: #cad9e8;
 }
 
 h1,
@@ -85,8 +87,33 @@ h3 {
   width: max-content !important;
 }
 
+.gallery-canvas-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.gallery-canvas {
+  min-width: 4rem;
+  image-rendering: pixelated;
+  background-color: var(--canvas-background);
+}
+
+.personal-canvas-container {
+  display: flex;
+  flex-direction: column;
+  image-rendering: pixelated;
+}
+
+.personal-canvas {
+  align-self: center;
+  width: 100%;
+  max-width: 32rem;
+  background-color: var(--canvas-background);
+}
+
 #drawingCanvas {
-  background-color: #cad9e8;
+  background-color: var(--canvas-background);
   width: 100%;
   max-width: 32rem;
   max-height: 32rem;

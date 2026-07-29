@@ -41,12 +41,15 @@
       </div>
       <form class="art-form" action="/submit-art" method="POST">
         <input id="imageData" type="hidden" name="image_data[]" value="0" />
+        <input id="username" type="hidden" name="username" value="username" />
         <button type="submit" class="submit-art">Submit Art!</button>
       </form>
     </main>
     <script>
       const palette = {{palette | tojson}};
     </script>
+    <script src="/static/scripts/constants.js"></script>
+    <script src="/static/scripts/palette.js"></script>
     <script src="/static/scripts/draw.js"></script>
   </body>
 </html>

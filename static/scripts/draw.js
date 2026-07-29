@@ -1,16 +1,11 @@
 const canvas = document.getElementById("drawingCanvas");
-const canvasSize = canvas.width;
+canvas.width = canvasSize;
+canvas.height = canvasSize;
 const canvasDetails = document.getElementById("canvasDetails");
 const ctx = canvas.getContext("2d", { willReadFrequently: true });
 ctx.imageSmoothingEnabled = false;
 
 const imageDataInput = document.getElementById("imageData");
-
-let paletteDecimal = [];
-palette.forEach((color) => {
-  color = color.replace("#", "");
-  paletteDecimal.push(parseInt(color, 16));
-});
 
 let isMouseDown = false;
 let lastPosition = { x: 0, y: 0 };
@@ -89,59 +84,6 @@ function redo() {
   undoStack.push(paletteImageData);
 
   ctx.putImageData(paletteToData(paletteImageData), 0, 0);
-}
-
-function dataToPalette(imageData) {
-  const pixels = imageData.data;
-  let paletizedImageData = [];
-  for (let p = 0; p < pixels.length; p += 4) {
-    const r = pixels[p];
-    const g = pixels[p + 1];
-    const b = pixels[p + 2];
-    const a = pixels[p + 3];
-
-    if (r == 0 && g == 0 && b == 0 && a == 0) {
-      paletizedImageData.push(-1);
-    } else {
-      paletizedImageData.push(
-        paletteDecimal.indexOf(b + g * 256 + r * 256 * 256),
-      );
-    }
-  }
-
-  imageDataInput.value = paletizedImageData;
-
-  return paletizedImageData;
-}
-
-function paletteToData(paletizedImageData) {
-  const imageData = ctx.createImageData(canvasSize, canvasSize);
-  let sourceData = [];
-
-  for (let p = 0; p < paletizedImageData.length; p++) {
-    let r, g, b, a;
-    if (paletizedImageData[p] == -1) {
-      r = 0;
-      g = 0;
-      b = 0;
-      a = 0;
-    } else {
-      a = 255;
-      const color = paletteDecimal[paletizedImageData[p]];
-      r = Math.floor(color / 256 / 256) % 256;
-      g = Math.floor((color % (256 * 256)) / 256) % 256;
-      b = color % 256;
-    }
-
-    sourceData.push(r);
-    sourceData.push(g);
-    sourceData.push(b);
-    sourceData.push(a);
-  }
-
-  imageData.data.set(sourceData);
-
-  return imageData;
 }
 
 window.addEventListener("mousemove", (event) => {
