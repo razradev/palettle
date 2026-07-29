@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Draw!</title>
+    <link rel="stylesheet" href="/static/styles/pico.min.css" />
+    <link rel="stylesheet" href="/static/styles/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Draw</h1>
+      <h2>Prompt: <strong>{{prompt}}</strong></h2>
+      <div class="drawing-ui">
+        <div class="palette">
+          <!-- Drawing Buttons -->
+          {% for color in palette %}
+          <button style="--color: {{color}}"></button>
+          {% endfor %}
+        </div>
+        <canvas id="drawingCanvas" width="32" height="32">
+          <!-- Drawing Canvas -->
+          Canvas Failed to Load
+        </canvas>
+        <div class="toolbar">
+          <!-- Drawing Buttons -->
+          <button></button>
+          <button></button>
+          <button></button>
+          <button></button>
+          <button></button>
+        </div>
+      </div>
+    </main>
+    <script src="/static/scripts/draw.js"></script>
+  </body>
+</html>
