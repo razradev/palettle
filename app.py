@@ -14,33 +14,36 @@ ART_DATABASE = "sqlite:///art.db"
 INTERACTIONS_DATABASE = "sqlite:///interactions.db"
 
 
-@app.route("/")
-def home():
-    art_df = pd.read_sql(
-        "SELECT * FROM art ORDER BY date_created DESC LIMIT 5", con=ART_DATABASE
-    )
-
+def get_with_likes(art_df):
     interactions_df = pd.read_sql(
         "SELECT * FROM interactions", con=INTERACTIONS_DATABASE
     )
     if not interactions_df.empty:
         likes = (
             pd.crosstab(
-                index=[art_df["prompt"], art_df["author"]],
+                index=[interactions_df["prompt"], interactions_df["author"]],
                 columns=interactions_df["liked"],
             )
             .reindex(columns=["like", "dislike"], fill_value=0)
             .reset_index()
+            .rename(columns={"like": "likes", "dislike": "dislikes"})
         )
-        likes = likes.rename(columns={"like": "likes", "dislike": "dislikes"})
 
         likes.columns.name = None
 
+        art_df = art_df.drop(columns=["likes", "dislikes"], errors="ignore")
         art_df = pd.merge(art_df, likes, on=["prompt", "author"], how="left")
 
     art = art_df.to_dict("records")
+    return art
 
-    return render_template("index.html", art=art)
+
+@app.route("/")
+def home():
+    art_df = pd.read_sql(
+        "SELECT * FROM art ORDER BY date_created DESC LIMIT 5", con=ART_DATABASE
+    )
+    return render_template("index.html", art=get_with_likes(art_df))
 
 
 @app.route("/interact", methods=["POST"])
@@ -81,12 +84,17 @@ def interact():
         interactions_df = pd.concat(
             [interactions_df, new_interaction], ignore_index=True
         )
+
+    print(interactions_df)
+
     interactions_df.to_sql(
         "interactions",
         con=INTERACTIONS_DATABASE,
         if_exists="replace",
         index=False,
     )
+
+    print(interactions_df.to_dict("records"))
     return redirect("/art/" + author)
 
 
@@ -140,6 +148,7 @@ def sign_up():
 
 @app.route("/draw", methods=["POST", "GET"])
 def draw():
+    get_daily()
     if request.method == "POST":
         username = request.json.get("username")
         today = datetime.now()
@@ -159,27 +168,8 @@ def gallery():
     art_df = pd.read_sql(
         "SELECT * FROM art ORDER BY date_created DESC", con=ART_DATABASE
     )
-    interactions_df = pd.read_sql(
-        "SELECT * FROM interactions", con=INTERACTIONS_DATABASE
-    )
-    if not interactions_df.empty:
-        likes = (
-            pd.crosstab(
-                index=[art_df["prompt"], art_df["author"]],
-                columns=interactions_df["liked"],
-            )
-            .reindex(columns=["like", "dislike"], fill_value=0)
-            .reset_index()
-        )
-        likes = likes.rename(columns={"like": "likes", "dislike": "dislikes"})
 
-        likes.columns.name = None
-
-        art_df = pd.merge(art_df, likes, on=["prompt", "author"], how="left")
-
-    art = art_df.to_dict("records")
-
-    return render_template("gallery.html", art=art, palette=palette)
+    return render_template("gallery.html", art=get_with_likes(art_df), palette=palette)
 
 
 @app.route("/art/<author>")
@@ -188,27 +178,15 @@ def art_details(author):
         f"SELECT * FROM art WHERE author = '{author}' ORDER BY date_created DESC",
         con=ART_DATABASE,
     )
-    interactions_df = pd.read_sql(
-        "SELECT * FROM interactions", con=INTERACTIONS_DATABASE
+
+    user_likes = pd.read_sql(
+        f"SELECT * FROM interactions WHERE author = '{author}'",
+        con=INTERACTIONS_DATABASE,
+    ).to_dict("records")
+
+    return render_template(
+        "art.html", art=get_with_likes(art_df), user_likes=user_likes, palette=palette
     )
-    if not interactions_df.empty:
-        likes = (
-            pd.crosstab(
-                index=[art_df["prompt"], art_df["author"]],
-                columns=interactions_df["liked"],
-            )
-            .reindex(columns=["like", "dislike"], fill_value=0)
-            .reset_index()
-        )
-        likes = likes.rename(columns={"like": "likes", "dislike": "dislikes"})
-
-        likes.columns.name = None
-
-        art_df = pd.merge(art_df, likes, on=["prompt", "author"], how="left")
-
-    art = art_df.to_dict("records")
-
-    return render_template("art.html", art=art, palette=palette)
 
 
 @app.route("/delete/<username>/<art>", methods=["POST"])
@@ -264,7 +242,7 @@ def submit_art():
     return redirect(url_for("gallery"))
 
 
-if __name__ == "__main__":
+def get_daily():
     global prompt, palette
     today = datetime.now()
     random.seed(int(str(today.day) + str(today.month) + str(today.year)))
@@ -276,4 +254,8 @@ if __name__ == "__main__":
         palette = response.json()["colors"]
         palette = ["#" + color for color in palette]
     prompt = random.choice(daily.prompts)
+
+
+if __name__ == "__main__":
+    get_daily()
     app.run(debug=True, port=3000)

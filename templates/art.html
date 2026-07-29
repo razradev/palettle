@@ -7,7 +7,7 @@
     {% if art | length == 0 %}
     <title>No Art Found</title>
     {% else %}
-    <title>{{art[0].author}} {{art[0].date_created}} | Palettle</title>
+    <title>{{art[0].author}} | Palettle</title>
     {% endif %}
     <link rel="stylesheet" href="/static/styles/pico.min.css" />
     <link rel="stylesheet" href="/static/styles/style.css" />
@@ -44,14 +44,26 @@
       <div class="personal-canvas-container">
         <canvas class="personal-canvas">{{a.image_data}}</canvas>
         <form class="art-form" action="/interact" method="POST">
-          <input type="hidden" name="username" id="thisUsername" />
+          <input type="hidden" name="username" class="username" />
           <input type="hidden" name="author" value="{{a.author}}" />
           <input type="hidden" name="prompt" value="{{a.prompt}}" />
-          <button class="icon-button" type="submit" name="like" value="like">
+          <button
+            class="icon-button"
+            type="submit"
+            name="like"
+            value="like"
+            id="{{a.author}}-{{a.prompt}}-like"
+          >
             <img class="icon" src="/static/images/thumbs-up.png" />
           </button>
           <p>{{(a.likes or 0) | int - (a.dislikes or 0) | int}}</p>
-          <button class="icon-button" type="submit" name="like" value="dislike">
+          <button
+            class="icon-button"
+            type="submit"
+            name="like"
+            value="dislike"
+            id="{{a.author}}-{{a.prompt}}-dislike"
+          >
             <img class="icon" src="/static/images/thumbs-down.png" />
           </button>
         </form>
@@ -61,14 +73,37 @@
     <script>
       const logOutEl = document.getElementById("logOut");
       const deletionForms = document.querySelectorAll(".del-form");
-      const thisUsername = document.getElementById("thisUsername");
-      thisUsername.value = username.textContent;
+      const artForms = document.querySelectorAll(".art-form");
+      const clientUsernames = document.querySelectorAll(".username");
 
-      if (username.textContent === window.location.href.split("/art/")[1]) {
+      const allInteractions = {{user_likes | tojson}};
+      const userInteractions = allInteractions.filter(like => like.username === username.textContent);
+
+      userInteractions.forEach((interaction) => {
+        if (interaction.liked === "like") {
+          document.getElementById(`${interaction.author}-${interaction.prompt}-dislike`).style.opacity = 0.5;
+        }
+        if (interaction.liked === "dislike") {
+          document.getElementById(`${interaction.author}-${interaction.prompt}-like`).style.opacity = 0.5;
+        }
+      })
+
+      clientUsernames.forEach((clientUsername) => {
+        clientUsername.value = username.textContent;
+      });
+
+      if (
+        username.textContent ===
+        window.location.href.split("/art/")[1].split("#")[0]
+      ) {
         logOutEl.hidden = false;
 
         deletionForms.forEach((form) => {
           form.hidden = false;
+        });
+
+        artForms.forEach((form) => {
+          form.hidden = true;
         });
       }
 
