@@ -92,6 +92,12 @@
         clientUsername.value = username.textContent;
       });
 
+      if (username.textContent == "Account") {
+        artForms.forEach((form) => {
+          form.hidden = true;
+        });
+      }
+
       if (
         username.textContent ===
         window.location.href.split("/art/")[1].split("#")[0]
@@ -106,6 +112,7 @@
           form.hidden = true;
         });
       }
+
 
       function logOut() {
         localStorage.clear();
