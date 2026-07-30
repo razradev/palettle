@@ -1,3 +1,4 @@
+# List of prompts
 prompts = [
     # Nature
     "Tree",
@@ -217,6 +218,7 @@ prompts = [
     "Smurf",
 ]
 
+# List of palettes
 palettes = [
     "nostalgia",
     "nes-advanced",

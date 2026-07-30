@@ -15,7 +15,6 @@
       <h2 class="prompt">Prompt: {{prompt}}</h2>
       <div class="drawing-ui">
         <div class="palette">
-          <!-- Color Palette Buttons -->
           {% for color in palette %}
           <input type="radio" name="palette"
             style="--color: {{color}}"
@@ -25,13 +24,11 @@
         </div>
         <div class="canvas-container">
           <canvas id="drawingCanvas" width="4" height="4">
-            <!-- Drawing Canvas -->
             Canvas Failed to Load
           </canvas>
           <p class="pixel-font" id="canvasDetails">X Y W H</p>
         </div>
         <div class="toolbar">
-          <!-- Drawing Buttons -->
           <label class="tool-label">
             <input type="radio" name="tool" onclick="setTool(0)" checked>
             <img class="icon" src="/static/images/pencil.png" />
