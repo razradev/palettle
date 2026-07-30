@@ -6,17 +6,17 @@
     <title>Gallery</title>
     <link rel="stylesheet" href="/static/styles/pico.min.css" />
     <link rel="stylesheet" href="/static/styles/style.css" />
+    <link rel="icon" type="image/x-icon" href="/static/images/palettle.png" />
   </head>
   <body>
+    {% include '_navbar.html' %}
     <main class="container">
-      <h1>Gallery</h1>
       <div class="gallery-canvas-container">
         {% for a in art %}
-        <a href="/art/{{a.author}}"
-          ><canvas class="gallery-canvas" id="{{a.author}}"
-            >{{a.image_data}}</canvas
-          ></a
-        >
+        <a class="gallery-canvas-link" href="/art/{{a.author}}">
+          <p class="likes-count">{{a.likes | int - a.dislikes | int}}</p>
+          <canvas class="gallery-canvas" id="{{loop.index0}}"></canvas
+        ></a>
         {% endfor %}
       </div>
     </main>

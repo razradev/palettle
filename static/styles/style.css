@@ -4,25 +4,35 @@
 }
 
 @font-face {
-  font-family: "Inter";
-  src: url("/static/fonts/Inter-VariableFont_opsz,wght.ttf");
+  font-family: "DM Mono";
+  src: url("/static/fonts/DMMono-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Remix Icon";
+  src: url("/static/fonts/remixicon.woff2");
+}
+
+* {
+  text-rendering: geometricPrecision;
 }
 
 :root {
   --font-display: "Depature Mono", system-ui, sans-serif;
-  --font-default: "Inter", system-ui, sans-serif;
+  --font-default: "DM Mono", system-ui, sans-serif;
 
   --pico-font-family: var(--font-default);
   --pico-border-radius: 0 !important;
 
-  --pico-background-color: #131e29 !important;
-  --pico-color: #e2e2f5 !important;
+  --pico-card-background-color: #18232e !important;
+  --pico-default-background-color: #131e29 !important;
+  --pico-background-color: var(--pico-default-background-color) !important;
+  --pico-default-color: #e2e2f5 !important;
 
   --pico-primary: #5f8cf8 !important;
   --pico-primary-background: #3860c8 !important;
   --pico-primary-underline: #6e99fe !important;
   --pico-primary-hover: #a2bdf7 !important;
-  --pico-primary-hover-background:                                                  !important;
   --pico-primary-focus: #4a77eb !important;
   --pico-primary-inverse: #fff !important;
 
@@ -32,24 +42,28 @@
 }
 
 h1,
-h2,
-h3,
-.pixel-font {
+.pixel-font,
+.likes-count {
   font-family: var(--font-display);
   font-weight: normal;
   letter-spacing: 0;
 }
 
-h1 {
-  font-size: 44px;
-}
-
-h2 {
-  font-size: 33px;
-}
-
+h2,
 h3 {
-  font-size: 22px;
+  font-weight: 800 !important;
+}
+
+button,
+a,
+label,
+input {
+  font-weight: 700 !important;
+}
+
+i {
+  all: unset;
+  font-family: "Remix Icon";
 }
 
 .prompt {
@@ -97,8 +111,8 @@ h3 {
 
 .tool-label:has(input[type="radio"]:checked),
 .tool-label:has(input[type="radio"]):hover {
-  border: 1px solid var(--pico-color);
-  background-color: var(--pico-background-color);
+  border: 1px solid var(--pico-primary-inverse);
+  background-color: var(--pico-default-background-color);
 }
 
 .tool-label:has(input[type="radio"]:checked) {
@@ -116,7 +130,6 @@ h3 {
 .icon-button {
   padding: 0.5rem;
   aspect-ratio: 1 / 1;
-  background-color: var(--pico-background-color) !important;
 }
 
 .icon {
@@ -148,7 +161,7 @@ h3 {
   width: 1.5rem;
   height: 1.5rem;
   outline: 2px solid var(--pico-primary-border);
-  border: 1px solid var(--pico-color);
+  border: 1px solid var(--pico-primary-inverse);
   z-index: 1;
   background-color: var(--color);
 }
@@ -173,11 +186,28 @@ h3 {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  gap: var(--pico-spacing);
 }
 
-.gallery-canvas {
-  min-width: 8rem;
+.gallery-canvas-container .gallery-canvas-link .gallery-canvas {
+  min-width: 20rem;
   image-rendering: pixelated;
+  border: 1px solid var(--pico-primary-inverse);
+}
+
+.gallery-slide {
+  display: flex;
+  gap: var(--pico-spacing);
+}
+
+.gallery-slide .gallery-canvas-link {
+  flex: 1;
+}
+
+.gallery-slide .gallery-canvas-link .gallery-canvas {
+  width: 100%;
+  image-rendering: pixelated;
+  border: 1px solid var(--pico-primary-inverse);
 }
 
 .personal-canvas-container {
@@ -190,6 +220,57 @@ h3 {
   align-self: center;
   width: 100%;
   max-width: 32rem;
+}
+
+.navbar {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: var(--pico-spacing);
+  padding: var(--pico-spacing);
+}
+
+.navbar a {
+  --pico-color: var(--pico-h1-color);
+  display: flex;
+  padding: var(--pico-form-element-spacing-vertical);
+  text-decoration: none;
+}
+
+.button-style {
+  --pico-color: var(--pico-h1-color);
+  display: flex;
+  padding: var(--pico-form-element-spacing-vertical)
+    var(--pico-form-element-spacing-horizontal);
+  text-decoration: none;
+  background-color: var(--pico-primary-background);
+}
+
+.button-style:hover {
+  background-color: var(--pico-primary-hover-background);
+  border: 1px solid var(--pico-inverse-color);
+}
+
+.gallery-canvas-link {
+  position: relative;
+  background-color: var(--pico-default-background-color);
+  transition-property: transform;
+}
+
+.gallery-canvas-link:hover {
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+.likes-count {
+  left: calc(var(--pico-spacing) / 2);
+  top: calc(var(--pico-spacing) / 2);
+  line-height: 0.8;
+  position: absolute;
+  color: white;
+  text-decoration: none !important;
+  border: none;
+  font-size: 33px;
 }
 
 #drawingCanvas {

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const userData = localStorage.getItem("key");
 
-  fetch("/verify", {
+  fetch(`/verify/${fail}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ key: userData }),
@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.redirect) {
         localStorage.clear();
         window.location.href = data.redirect;
+      } else {
+        document.querySelector("main").hidden = false;
       }
     });
 });

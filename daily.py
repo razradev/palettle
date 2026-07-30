@@ -225,5 +225,5 @@ palettes = [
     "sweetie-16",
     "pico-8",
     "1bit-monitor-glow",
-    "punolite-plusplus",
+    "punolite-plus-plus",
 ]

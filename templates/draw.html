@@ -6,12 +6,13 @@
     <title>Draw!</title>
     <link rel="stylesheet" href="/static/styles/pico.min.css" />
     <link rel="stylesheet" href="/static/styles/style.css" />
+    <link rel="icon" type="image/x-icon" href="/static/images/palettle.png" />
   </head>
   <body>
-    <script src="/static/scripts/verify.js"></script>
-    <main class="container">
-      <h1>Draw</h1>
-      <h2 class="prompt">Prompt: <strong>{{prompt}}</strong></h2>
+    {% include '_navbar.html' %}
+  <script>const fail = "/sign-up";</script>
+    <main id="main" class="container" hidden>
+      <h2 class="prompt">Prompt: {{prompt}}</h2>
       <div class="drawing-ui">
         <div class="palette">
           <!-- Color Palette Buttons -->
@@ -57,10 +58,11 @@
       </div>
       <form class="art-form" action="/submit-art" method="POST">
         <input id="imageData" type="hidden" name="image_data[]" value="0" />
-        <input id="username" type="hidden" name="username" value="username" />
+        <input id="authorInput" type="hidden" name="username" value="" />
         <button type="submit" class="submit-art">Submit Art!</button>
       </form>
     </main>
+    <script src="/static/scripts/verify.js"></script>
     <script>
       const palette = {{palette | tojson}};
     </script>

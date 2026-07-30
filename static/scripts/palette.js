@@ -27,9 +27,18 @@ function dataToPalette(imageData) {
   return paletizedImageData;
 }
 
-function paletteToData(paletizedImageData) {
+function paletteToData(paletizedImageData, pal = palette) {
   const imageData = new ImageData(canvasSize, canvasSize);
   let sourceData = [];
+
+  let imgPalette = pal;
+  if (typeof pal == typeof "") imgPalette = pal.split(",");
+
+  let imgPaletteDecimal = [];
+  imgPalette.forEach((color) => {
+    color = color.replace("#", "");
+    imgPaletteDecimal.push(parseInt(color, 16));
+  });
 
   for (let p = 0; p < paletizedImageData.length; p++) {
     let r, g, b, a;
@@ -40,7 +49,7 @@ function paletteToData(paletizedImageData) {
       a = 0;
     } else {
       a = 255;
-      const color = paletteDecimal[paletizedImageData[p] - 1];
+      const color = imgPaletteDecimal[paletizedImageData[p] - 1];
       r = Math.floor(color / 256 / 256) % 256;
       g = Math.floor((color % (256 * 256)) / 256) % 256;
       b = color % 256;

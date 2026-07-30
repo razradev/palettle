@@ -1,4 +1,5 @@
-document.getElementById("username").value = localStorage.getItem("username");
+document.getElementById("authorInput").value =
+  localStorage.getItem("username") || "";
 
 const canvas = document.getElementById("drawingCanvas");
 canvas.width = canvasSize;
@@ -31,6 +32,21 @@ let isKeyDown = { undo: false, redo: false, fill: false };
 let paletteImageData = dataToPalette(
   ctx.getImageData(0, 0, canvas.width, canvas.height),
 );
+
+fetch(`/draw`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ username: localStorage.getItem("username") }),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    if (data.status === "success") {
+      const existingImageData = data.existing[0].image_data;
+      paletteImageData = existingImageData
+        .split(",")
+        .map((pixel) => parseInt(pixel) || 0);
+    }
+  });
 
 function setColor(color) {
   currentColor = color;

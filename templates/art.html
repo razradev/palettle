@@ -3,30 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {% if art | length == 0 %}
+    <title>No Art Found</title>
+    {% else %}
     <title>{{art[0].author}}'s Art for {{art[0].date_created}}</title>
+    {% endif %}
     <link rel="stylesheet" href="/static/styles/pico.min.css" />
     <link rel="stylesheet" href="/static/styles/style.css" />
+    <link rel="icon" type="image/x-icon" href="/static/images/palettle.png" />
   </head>
   <body>
+    {% include '_navbar.html' %}
     <main class="container">
+      <button name="logout" id="logOut" onclick="logOut()" hidden>
+        Log Out
+      </button>
+      {% if art | length == 0 %}
+      <h1>No Art Found</h1>
+      {% else %}
       <h1>{{art[0].author}}'s {{art[0].prompt}}</h1>
       <h3>{{art[0].date_created}}</h3>
       <div class="personal-canvas-container">
-        <canvas class="personal-canvas" id="{{art[0].author}}"
+        <canvas class="personal-canvas" id="{{0}}"
           >{{art[0].image_data}}</canvas
         >
         <form class="art-form">
           <button class="icon-button" type="submit">
             <img class="icon" src="/static/images/thumbs-up.png" />
           </button>
-          <p>{{art[0].likes}}</p>
+          <p>{{art[0].likes | int - art[0].dislikes | int}}</p>
           <button class="icon-button" type="submit">
             <img class="icon" src="/static/images/thumbs-down.png" />
           </button>
-          <p>{{art[0].likes}}</p>
         </form>
       </div>
+      {% endif %}
     </main>
+    <script>
+      const logOutEl = document.getElementById("logOut");
+      console.log(window.location.href);
+      if (username.textContent === window.location.href.split("/art/")[1]) {
+        logOutEl.hidden = false;
+      }
+
+      function logOut() {
+        localStorage.clear();
+        window.location.href = "/";
+      }
+    </script>
     <script>
       const palette = {{palette | tojson}};
       const art = {{art | tojson}};

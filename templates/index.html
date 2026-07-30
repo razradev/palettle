@@ -6,10 +6,40 @@
     <title>Draw</title>
     <link rel="stylesheet" href="/static/styles/pico.min.css" />
     <link rel="stylesheet" href="/static/styles/style.css" />
+    <link rel="icon" type="image/x-icon" href="/static/images/palettle.png" />
   </head>
   <body>
+    {% include '_navbar.html' %}
     <main class="container">
-      <h1>Draw</h1>
+      <article>
+        <h2>Make Art - One Pixel at a Time.</h2>
+        <p>Every day you get a new prompt and palette. Draw something great.</p>
+        <a class="button-style" href="/sign-up" style="width: max-content"
+          >Start Drawing <i>&#xEA6C;</i></a
+        >
+      </article>
+      <article>
+        <a href="/gallery" style="text-decoration: none">
+          <h2>
+            Gallery
+            <i>&#xEA6C;</i>
+          </h2>
+        </a>
+        <div class="gallery-slide">
+          {% for a in art %}
+          <a class="gallery-canvas-link" href="/art/{{a.author}}">
+            <p class="likes-count">{{a.likes | int - a.dislikes | int}}</p>
+            <canvas class="gallery-canvas" id="{{loop.index0}}"></canvas
+          ></a>
+          {% endfor %}
+        </div>
+      </article>
     </main>
+    <script>
+      const art = {{art | tojson}};
+    </script>
+    <script src="/static/scripts/constants.js"></script>
+    <script src="/static/scripts/palette.js"></script>
+    <script src="/static/scripts/gallery.js"></script>
   </body>
 </html>

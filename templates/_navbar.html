@@ -1,0 +1,15 @@
+<nav class="navbar">
+  <h1>Palettle</h1>
+  <div style="flex: 1"></div>
+  <a href="/">Home</a>
+  <a href="/gallery">Gallery</a>
+  <a href="/draw">Draw</a>
+  <a id="username" class="button-style" href="/sign-up">Account</a>
+</nav>
+<script>
+  const username = document.getElementById("username");
+  username.textContent = localStorage.getItem("username") || "Account";
+  if (username.textContent != "Account") {
+    username.href = `/art/${username.textContent}`;
+  }
+</script>

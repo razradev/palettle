@@ -1,15 +1,14 @@
-const canvases = art.map((a) => document.getElementById(a.author));
+const canvasElements = document.querySelectorAll("canvas");
 
-canvases.forEach((canvas) => {
-  if (canvas) {
+canvasElements.forEach((canvas, i) => {
+  if (art[i] && art[i].image_data) {
     const c = canvas.getContext("2d");
-    const imageData = canvas.textContent;
-    const parsedImageData = imageData.split(",").map((p) => parseInt(p) || 0);
-    console.log(parsedImageData);
+    const parsedImageData = art[i].image_data
+      .split(",")
+      .map((p) => parseInt(p) || 0);
 
     canvas.width = canvasSize;
     canvas.height = canvasSize;
-
-    c.putImageData(paletteToData(parsedImageData), 0, 0);
+    c.putImageData(paletteToData(parsedImageData, art[i].palette), 0, 0);
   }
 });
