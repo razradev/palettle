@@ -1,7 +1,7 @@
 # Palettle
 
 A social web app where users draw new pixel art every day. Get creative with art constraints!
-![Drawing in Editor](/static/images/palettle.gif)
+![Drawing in Editor](./static/images/palettle.gif)
 
 ## Features
 
@@ -34,10 +34,10 @@ A social web app where users draw new pixel art every day. Get creative with art
 
 ## Getting Started
 
-1. Clone the repository
+1. Clone the repository and move into it
 
 ```
-git clone https://github.com/razradev/palettle.git
+git clone https://github.com/razradev/palettle.git && cd ./palettle
 ```
 
 2. Install dependencies
