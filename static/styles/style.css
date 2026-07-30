@@ -13,8 +13,22 @@
   --font-default: "Inter", system-ui, sans-serif;
 
   --pico-font-family: var(--font-default);
+  --pico-border-radius: 0 !important;
+
+  --pico-background-color: #131e29 !important;
+  --pico-color: #e2e2f5 !important;
+
+  --pico-primary: #5f8cf8 !important;
+  --pico-primary-background: #3860c8 !important;
+  --pico-primary-underline: #6e99fe !important;
+  --pico-primary-hover: #a2bdf7 !important;
+  --pico-primary-hover-background:                                                  !important;
+  --pico-primary-focus: #4a77eb !important;
+  --pico-primary-inverse: #fff !important;
 
   --canvas-background: #cad9e8;
+  --canvas-background-dark: #dae9f8;
+  --canvas-background-light: #bac9d8;
 }
 
 h1,
@@ -56,31 +70,99 @@ h3 {
   flex-direction: column;
 }
 
-.toolbar,
-.palette {
+.toolbar {
   display: flex;
   flex-direction: column;
   gap: calc(var(--pico-spacing) / 2);
 }
 
-.toolbar button {
-  width: 2rem;
-  text-overflow: clip;
-  text-wrap-mode: nowrap;
-  aspect-ratio: 1 / 1;
+.tool-label input[type="radio"] {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  opacity: 0;
+  width: 0;
 }
 
-.palette button {
-  width: 2rem;
+.tool-label {
+  box-sizing: border-box;
+  background-color: var(--pico-primary-background);
+  padding: 0.5rem;
+  margin: 0;
+  display: flex;
+  border: 1px solid var(--pico-primary-border);
+  border-radius: var(--pico-border-radius);
+}
+
+.tool-label:has(input[type="radio"]:checked),
+.tool-label:has(input[type="radio"]):hover {
+  border: 1px solid var(--pico-color);
+  background-color: var(--pico-background-color);
+}
+
+.tool-label:has(input[type="radio"]:checked) {
+  outline: 2px solid var(--pico-primary-border);
+}
+
+.palette {
+  display: flex;
+  flex-wrap: wrap;
+  width: 6rem;
+  align-content: flex-start;
+}
+
+.toolbar button,
+.icon-button {
+  padding: 0.5rem;
   aspect-ratio: 1 / 1;
-  border-color: color-mix(var(--color) 75%, white);
+  background-color: var(--pico-background-color) !important;
+}
+
+.icon {
+  width: 1.5rem;
+  image-rendering: pixelated;
+  position: relative;
+  filter: invert(100%);
+}
+
+.palette input[type="radio"] {
+  all: revert;
+  padding: 0;
+  margin: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.palette input[type="radio"]::after {
+  content: "";
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: var(--color);
+}
+
+.palette input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  outline: 2px solid var(--pico-primary-border);
+  border: 1px solid var(--pico-color);
+  z-index: 1;
   background-color: var(--color);
 }
 
 .art-form {
+  margin-top: 1rem;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.art-form button {
+  width: max-content;
 }
 
 .submit-art {
@@ -94,9 +176,8 @@ h3 {
 }
 
 .gallery-canvas {
-  min-width: 4rem;
+  min-width: 8rem;
   image-rendering: pixelated;
-  background-color: var(--canvas-background);
 }
 
 .personal-canvas-container {
@@ -109,17 +190,21 @@ h3 {
   align-self: center;
   width: 100%;
   max-width: 32rem;
-  background-color: var(--canvas-background);
 }
 
 #drawingCanvas {
-  background-color: var(--canvas-background);
+  background: repeating-conic-gradient(
+      var(--canvas-background-dark) 0 25%,
+      var(--canvas-background-light) 0 50%
+    )
+    0 0 / 50% 50%;
   width: 100%;
   max-width: 32rem;
   max-height: 32rem;
   flex-shrink: 0;
   aspect-ratio: 1 / 1;
   image-rendering: pixelated;
+  cursor: crosshair;
 }
 
 #canvasDetails {

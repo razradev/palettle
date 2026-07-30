@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/static/styles/style.css" />
   </head>
   <body>
+    <script src="/static/scripts/verify.js"></script>
     <main class="container">
       <h1>Draw</h1>
       <h2 class="prompt">Prompt: <strong>{{prompt}}</strong></h2>
@@ -15,10 +16,10 @@
         <div class="palette">
           <!-- Color Palette Buttons -->
           {% for color in palette %}
-          <button
+          <input type="radio" name="palette"
             style="--color: {{color}}"
             onclick="setColor('{{color}}')"
-          ></button>
+          ></input>
           {% endfor %}
         </div>
         <div class="canvas-container">
@@ -30,13 +31,28 @@
         </div>
         <div class="toolbar">
           <!-- Drawing Buttons -->
-          <button onclick="setTool(0)">Draw</button>
-          <button onclick="setTool(1)">Erase</button>
-          <button onclick="setTool(2)">Fill</button>
-          <button onclick="setTool(3)">Move</button>
-          <button onclick="setTool(4)">Select</button>
-          <button onclick="undo()">Undo</button>
-          <button onclick="redo()">Redo</button>
+          <label class="tool-label">
+            <input type="radio" name="tool" onclick="setTool(0)" checked>
+            <img class="icon" src="/static/images/pencil.png" />
+          </label>
+          <label class="tool-label">
+            <input type="radio" name="tool" onclick="setTool(1)">
+            <img class="icon" src="/static/images/eraser.png" />
+          </label>
+          <label class="tool-label">
+            <input type="radio" name="tool" onclick="setTool(2)">
+            <img class="icon" src="/static/images/bucket.png" />
+          </label>
+
+          <button onclick="clearCanvas()">
+            <img class="icon" src="/static/images/x.png" />
+          </button>
+          <button onclick="undo()">
+            <img class="icon" src="/static/images/undo.png" />
+          </button>
+          <button onclick="redo()">
+            <img class="icon" src="/static/images/redo.png" />
+          </button>
         </div>
       </div>
       <form class="art-form" action="/submit-art" method="POST">

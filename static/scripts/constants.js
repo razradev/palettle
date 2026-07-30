@@ -1,1 +1,1 @@
-const canvasSize = 4;
+const canvasSize = 32;

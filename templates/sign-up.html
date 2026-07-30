@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Start Drawing</title>
+    <link rel="stylesheet" href="/static/styles/pico.min.css" />
+    <link rel="stylesheet" href="/static/styles/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <form method="POST" action="/sign-up" onsubmit="saveData()">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Enter a Username"
+        />
+        <input type="hidden" name="key" id="key" />
+        <button type="submit">Submit</button>
+      </form>
+    </main>
+    <script>
+      if (localStorage.getItem("key") && localStorage.getItem("username")) {
+        window.location.href = "/draw";
+      }
+
+      const username = document.getElementById("username");
+      const keyElement = document.getElementById("key");
+      keyElement.value = crypto.randomUUID();
+
+      function saveData() {
+        localStorage.setItem("username", username.value);
+        localStorage.setItem("key", keyElement.value);
+      }
+    </script>
+  </body>
+</html>

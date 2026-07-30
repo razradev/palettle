@@ -1,3 +1,5 @@
+document.getElementById("username").value = localStorage.getItem("username");
+
 const canvas = document.getElementById("drawingCanvas");
 canvas.width = canvasSize;
 canvas.height = canvasSize;
@@ -9,13 +11,12 @@ const imageDataInput = document.getElementById("imageData");
 
 let isMouseDown = false;
 let lastPosition = { x: 0, y: 0 };
+let absMousePos = { x: 0, y: 0 };
 
 const Tool = Object.freeze({
   Draw: 0,
   Erase: 1,
   Fill: 2,
-  Move: 3,
-  Select: 4,
 });
 let currentTool = Tool.Draw;
 
@@ -25,7 +26,7 @@ ctx.fillStyle = currentColor;
 let undoStack = [];
 let redoStack = [];
 
-let isKeyDown = { undo: false, redo: false };
+let isKeyDown = { undo: false, redo: false, fill: false };
 
 let paletteImageData = dataToPalette(
   ctx.getImageData(0, 0, canvas.width, canvas.height),
@@ -86,8 +87,48 @@ function redo() {
   ctx.putImageData(paletteToData(paletteImageData), 0, 0);
 }
 
-window.addEventListener("mousemove", (event) => {
-  const absMousePos = { x: event.clientX, y: event.clientY };
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvasSize, canvasSize);
+  paletteImageData = dataToPalette(
+    ctx.getImageData(0, 0, canvas.width, canvas.height),
+  );
+}
+
+function floodFill(position) {
+  const startColor = paletteImageData[position.x + position.y * canvasSize];
+  const currentColorIndex = palette.indexOf(currentColor) + 1;
+
+  if (startColor == currentColorIndex) return;
+
+  let stack = [position.x + position.y * canvasSize];
+  for (let i = 0; i < 10000; i++) {
+    if (stack.length <= 0) break;
+    let n = stack[0];
+    stack.splice(0, 1);
+    if (startColor == paletteImageData[n]) {
+      paletteImageData[n] = currentColorIndex;
+
+      if (
+        n - 1 >= 0 &&
+        Math.floor(n / canvasSize) == Math.floor((n - 1) / canvasSize)
+      )
+        stack.push(n - 1);
+
+      if (
+        n + 1 < paletteImageData.length &&
+        Math.floor(n / canvasSize) == Math.floor((n + 1) / canvasSize)
+      )
+        stack.push(n + 1);
+
+      if (n + canvasSize < paletteImageData.length) stack.push(n + canvasSize);
+      if (n - canvasSize >= 0) stack.push(n - canvasSize);
+    }
+  }
+
+  imageDataInput.value = paletteImageData;
+}
+
+const loop = setInterval(() => {
   if (isInCanvas(absMousePos, canvas.getBoundingClientRect())) {
     const pixelMousePos = getPixelMousePos(absMousePos, canvas);
     canvasDetails.textContent = `(${pixelMousePos.x}, ${pixelMousePos.y}) ${canvasSize}x${canvasSize}`;
@@ -148,10 +189,17 @@ window.addEventListener("mousemove", (event) => {
       paletteImageData = dataToPalette(
         ctx.getImageData(0, 0, canvas.width, canvas.height),
       );
+    } else if (isMouseDown && !isKeyDown.fill && currentTool == Tool.Fill) {
+      isKeyDown.fill = true;
+      floodFill(pixelMousePos);
     }
 
     lastPosition = pixelMousePos;
   }
+}, 16.67);
+
+window.addEventListener("mousemove", (event) => {
+  absMousePos = { x: event.clientX, y: event.clientY };
 });
 
 window.addEventListener("mousedown", (event) => {
@@ -165,6 +213,7 @@ window.addEventListener("mouseup", (event) => {
   }
 
   isMouseDown = false;
+  isKeyDown.fill = false;
 });
 
 window.addEventListener("keydown", (event) => {

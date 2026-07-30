@@ -9,15 +9,20 @@
   </head>
   <body>
     <main class="container">
-      <h1>{{art[0].author}}'s Art for {{art[0].date_created}}</h1>
+      <h1>{{art[0].author}}'s {{art[0].prompt}}</h1>
+      <h3>{{art[0].date_created}}</h3>
       <div class="personal-canvas-container">
         <canvas class="personal-canvas" id="{{art[0].author}}"
           >{{art[0].image_data}}</canvas
         >
         <form class="art-form">
-          <button type="submit">Like</button>
+          <button class="icon-button" type="submit">
+            <img class="icon" src="/static/images/thumbs-up.png" />
+          </button>
           <p>{{art[0].likes}}</p>
-          <button type="submit">Dislike</button>
+          <button class="icon-button" type="submit">
+            <img class="icon" src="/static/images/thumbs-down.png" />
+          </button>
           <p>{{art[0].likes}}</p>
         </form>
       </div>
@@ -25,6 +30,8 @@
     <script>
       const palette = {{palette | tojson}};
       const art = {{art | tojson}};
+
+      console.log(palette)
     </script>
     <script src="/static/scripts/constants.js"></script>
     <script src="/static/scripts/palette.js"></script>

@@ -4,7 +4,8 @@ canvases.forEach((canvas) => {
   if (canvas) {
     const c = canvas.getContext("2d");
     const imageData = canvas.textContent;
-    const parsedImageData = imageData.split(",").map((p) => parseInt(p));
+    const parsedImageData = imageData.split(",").map((p) => parseInt(p) || 0);
+    console.log(parsedImageData);
 
     canvas.width = canvasSize;
     canvas.height = canvasSize;
