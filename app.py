@@ -17,6 +17,9 @@ USERS_DATABASE = "sqlite:///users.db"
 ART_DATABASE = "sqlite:///art.db"
 INTERACTIONS_DATABASE = "sqlite:///interactions.db"
 
+prompt = None
+palette = []
+
 
 @app.route("/")
 def home():
