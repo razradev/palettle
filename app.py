@@ -309,4 +309,4 @@ def get_with_likes(art_df):
 
 if __name__ == "__main__":
     get_daily()  # Get daily prompt/palette
-    app.run()
+    app.run(host="0.0.0.0")
