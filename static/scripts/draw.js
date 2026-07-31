@@ -45,6 +45,8 @@ fetch(`/draw`, {
       paletteImageData = existingImageData
         .split(",")
         .map((pixel) => parseInt(pixel) || 0);
+      undoStack.push(paletteImageData);
+      imageDataInput.value = paletteImageData;
     }
   });
 

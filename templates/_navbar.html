@@ -7,6 +7,20 @@
   <a id="username" class="button-style" href="/sign-up">Account</a>
 </nav>
 <script>
+  if (localStorage.getItem("key")) {
+    fetch(`/verify/${"/"}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: localStorage.getItem("key") }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.redirect) {
+          localStorage.clear();
+        }
+      });
+  }
+
   const username = document.getElementById("username");
   username.textContent = localStorage.getItem("username") || "Account";
   if (username.textContent != "Account") {

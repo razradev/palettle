@@ -7,7 +7,7 @@
     {% if art | length == 0 %}
     <title>No Art Found</title>
     {% else %}
-    <title>{{art[0].author}}'s Art for {{art[0].date_created}}</title>
+    <title>{{art[0].author}} {{art[0].date_created}} | Palettle</title>
     {% endif %}
     <link rel="stylesheet" href="/static/styles/pico.min.css" />
     <link rel="stylesheet" href="/static/styles/style.css" />
@@ -16,35 +16,53 @@
   <body>
     {% include '_navbar.html' %}
     <main class="container">
-      <button name="logout" id="logOut" onclick="logOut()" hidden>
+      <button
+        name="logout"
+        id="logOut"
+        class="logout-button"
+        onclick="logOut()"
+        hidden
+      >
         Log Out
       </button>
       {% if art | length == 0 %}
       <h1>No Art Found</h1>
-      {% else %}
-      <h1>{{art[0].author}}'s {{art[0].prompt}}</h1>
-      <h3>{{art[0].date_created}}</h3>
-      <div class="personal-canvas-container">
-        <canvas class="personal-canvas" id="{{0}}"
-          >{{art[0].image_data}}</canvas
+      {% else %} {% for a in art %}
+      <span class="art-header" id="{{a.prompt}}">
+        <h1>{{a.prompt}}</h1>
+        <form
+          class="delete-art del-form"
+          onsubmit="event.preventDefault(); deleteArt('{{a.author}}', '{{a.prompt}}')"
+          hidden
         >
+          <button type="submit" class="icon-button" type="submit">
+            <img class="icon" src="/static/images/x.png" />
+          </button>
+        </form>
+      </span>
+      <h3>{{a.date_created}}</h3>
+      <div class="personal-canvas-container">
+        <canvas class="personal-canvas">{{a.image_data}}</canvas>
         <form class="art-form">
           <button class="icon-button" type="submit">
             <img class="icon" src="/static/images/thumbs-up.png" />
           </button>
-          <p>{{art[0].likes | int - art[0].dislikes | int}}</p>
+          <p>{{a.likes | int - a.dislikes | int}}</p>
           <button class="icon-button" type="submit">
             <img class="icon" src="/static/images/thumbs-down.png" />
           </button>
         </form>
       </div>
-      {% endif %}
+      {% endfor %} {% endif %}
     </main>
     <script>
       const logOutEl = document.getElementById("logOut");
-      console.log(window.location.href);
+      const deletionForms = document.querySelectorAll(".del-form");
       if (username.textContent === window.location.href.split("/art/")[1]) {
         logOutEl.hidden = false;
+        deletionForms.forEach((form) => {
+          form.hidden = false;
+        });
       }
 
       function logOut() {
@@ -53,10 +71,21 @@
       }
     </script>
     <script>
+      function deleteArt(u, p) {
+        fetch(`/delete/${u}/${p}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ key: localStorage.getItem("key") }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            window.location.href = window.location.href;
+          });
+      }
+    </script>
+    <script>
       const palette = {{palette | tojson}};
       const art = {{art | tojson}};
-
-      console.log(palette)
     </script>
     <script src="/static/scripts/constants.js"></script>
     <script src="/static/scripts/palette.js"></script>

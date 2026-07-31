@@ -1,8 +1,9 @@
 let paletteDecimal = [];
-palette.forEach((color) => {
-  color = color.replace("#", "");
-  paletteDecimal.push(parseInt(color, 16));
-});
+if (typeof palette !== "undefined")
+  palette.forEach((color) => {
+    color = color.replace("#", "");
+    paletteDecimal.push(parseInt(color, 16));
+  });
 
 function dataToPalette(imageData) {
   const pixels = imageData.data;

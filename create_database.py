@@ -2,6 +2,7 @@ import pandas as pd
 
 USERS_DATABASE = "sqlite:///users.db"
 ART_DATABASE = "sqlite:///art.db"
+INTERACTIONS_DATABASE = "sqlite:///interactions.db"
 
 if __name__ == "__main__":
     art_data = {
@@ -19,3 +20,9 @@ if __name__ == "__main__":
     user_data = {"username": [], "key": [], "pin": []}
     user_df = pd.DataFrame(user_data)
     user_df.to_sql("users", con=USERS_DATABASE, if_exists="replace", index=False)
+
+    interaction_data = {"username": [], "art": [], "liked": []}
+    interaction_df = pd.DataFrame(user_data)
+    interaction_df.to_sql(
+        "interactions", con=INTERACTIONS_DATABASE, if_exists="replace", index=False
+    )

@@ -174,12 +174,27 @@ i {
   gap: 1rem;
 }
 
+.art-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.delete-art button {
+  width: max-content;
+  background-color: var(--pico-del-color);
+  border-color: var(--pico-default-color);
+}
+
 .art-form button {
   width: max-content;
 }
 
 .submit-art {
   width: max-content !important;
+}
+
+.logout-button {
+  margin-bottom: var(--pico-spacing);
 }
 
 .gallery-canvas-container {
@@ -258,11 +273,41 @@ i {
 }
 
 .gallery-canvas-link:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   z-index: 1;
 }
 
-.likes-count {
+.username-small,
+.prompt-small {
+  opacity: 0;
+  transition-property: opacity;
+}
+
+.username-small {
+  right: calc(var(--pico-spacing) / 2);
+  top: calc(var(--pico-spacing) / 2);
+  line-height: 0.8;
+  position: absolute;
+  color: white;
+  text-decoration: none !important;
+  border: none;
+  font-size: 33px;
+  filter: drop-shadow(1px 1px 4px black);
+}
+
+.prompt-small {
+  left: calc(var(--pico-spacing) / 2);
+  bottom: calc(var(--pico-spacing) / 2);
+  margin-bottom: calc(-1 * var(--pico-spacing) / 2);
+  position: absolute;
+  color: white;
+  text-decoration: none !important;
+  border: none;
+  font-size: 33px;
+  filter: drop-shadow(1px 1px 4px black);
+}
+
+.gallery-canvas-link .likes-count {
   left: calc(var(--pico-spacing) / 2);
   top: calc(var(--pico-spacing) / 2);
   line-height: 0.8;
@@ -271,6 +316,12 @@ i {
   text-decoration: none !important;
   border: none;
   font-size: 33px;
+  filter: drop-shadow(1px 1px 4px black);
+}
+
+.gallery-canvas-link:hover .username-small,
+.gallery-canvas-link:hover .prompt-small {
+  opacity: 1;
 }
 
 #drawingCanvas {

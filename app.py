@@ -15,7 +15,9 @@ ART_DATABASE = "sqlite:///art.db"
 
 @app.route("/")
 def home():
-    art = pd.read_sql("SELECT * FROM art LIMIT 3", con=ART_DATABASE).to_dict("records")
+    art = pd.read_sql(
+        "SELECT * FROM art ORDER BY date_created DESC LIMIT 5", con=ART_DATABASE
+    ).to_dict("records")
     return render_template("index.html", art=art)
 
 
@@ -85,16 +87,40 @@ def draw():
 
 @app.route("/gallery")
 def gallery():
-    art = pd.read_sql("SELECT * FROM art", con=ART_DATABASE).to_dict("records")
+    art = pd.read_sql(
+        "SELECT * FROM art ORDER BY date_created DESC", con=ART_DATABASE
+    ).to_dict("records")
     return render_template("gallery.html", art=art, palette=palette)
 
 
 @app.route("/art/<author>")
 def art_details(author):
     art = pd.read_sql(
-        f"SELECT * FROM art WHERE author = '{author}'", con=ART_DATABASE
+        f"SELECT * FROM art WHERE author = '{author}' ORDER BY date_created DESC",
+        con=ART_DATABASE,
     ).to_dict("records")
     return render_template("art.html", art=art, palette=palette)
+
+
+@app.route("/delete/<username>/<art>", methods=["POST"])
+def delete_art(username, art):
+    key = request.json.get("key")
+
+    user = pd.read_sql(
+        f"SELECT * FROM users WHERE username = '{username}' AND key = '{key}'",
+        con=USERS_DATABASE,
+    ).to_dict("records")
+
+    if len(user) > 0 and key == user[0]["key"]:
+        art_df = pd.read_sql("SELECT * FROM art", con=ART_DATABASE)
+        art_df = art_df.drop(
+            art_df[(art_df["author"] == username) & (art_df["prompt"] == art)].index
+        )
+        art_df.to_sql("art", con=ART_DATABASE, if_exists="replace", index=False)
+
+        return jsonify({"status": "success"})
+
+    return jsonify({"status": "fail"})
 
 
 @app.route("/submit-art", methods=["POST"])
