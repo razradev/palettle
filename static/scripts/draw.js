@@ -283,23 +283,13 @@ window.addEventListener("keydown", (event) => {
     }
   }
 
-  switch (event.key) {
-    case "b":
-      setTool(Tool.Draw);
-      tools.forEach((t) => (t.checked = false));
-      tools[Tool.Draw].checked = true;
-      break;
-    case "e":
-      setTool(Tool.Erase);
-      tools.forEach((t) => (t.checked = false));
-      tools[Tool.Erase].checked = true;
-      break;
-    case "g":
-      setTool(Tool.Fill);
-      tools.forEach((t) => (t.checked = false));
-      tools[Tool.Fill].checked = true;
-      break;
-  }
+  // Tool shortcuts
+  if (event.key === "b") setTool(Tool.Draw);
+  if (event.key === "e") setTool(Tool.Erase);
+  if (event.key === "g") setTool(Tool.Fill);
+
+  tools.forEach((t) => (t.checked = false));
+  tools[currentTool].checked = true;
 });
 
 window.addEventListener("keyup", (event) => {
