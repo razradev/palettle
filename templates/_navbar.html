@@ -8,7 +8,7 @@
 </nav>
 <script>
   if (localStorage.getItem("key")) {
-    fetch(`/verify/${"/"}`, {
+    fetch(`/verify/${"sign-up"}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ key: localStorage.getItem("key") }),

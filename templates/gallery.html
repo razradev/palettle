@@ -16,7 +16,9 @@
         <a class="gallery-canvas-link" href="/art/{{a.author}}#{{a.prompt}}">
           <p class="prompt-small">{{a.prompt}}</p>
           <p class="username-small">{{a.author}}</p>
-          <p class="likes-count">{{a.likes | int - a.dislikes | int}}</p>
+          <p class="likes-count">
+            {{(a.likes or 0) | int - (a.dislikes or 0) | int}}
+          </p>
           <canvas class="gallery-canvas" id="{{loop.index0}}"></canvas
         ></a>
         {% endfor %}

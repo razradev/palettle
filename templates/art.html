@@ -43,12 +43,15 @@
       <h3>{{a.date_created}}</h3>
       <div class="personal-canvas-container">
         <canvas class="personal-canvas">{{a.image_data}}</canvas>
-        <form class="art-form">
-          <button class="icon-button" type="submit">
+        <form class="art-form" action="/interact" method="POST">
+          <input type="hidden" name="username" id="thisUsername" />
+          <input type="hidden" name="author" value="{{a.author}}" />
+          <input type="hidden" name="prompt" value="{{a.prompt}}" />
+          <button class="icon-button" type="submit" name="like" value="like">
             <img class="icon" src="/static/images/thumbs-up.png" />
           </button>
-          <p>{{a.likes | int - a.dislikes | int}}</p>
-          <button class="icon-button" type="submit">
+          <p>{{(a.likes or 0) | int - (a.dislikes or 0) | int}}</p>
+          <button class="icon-button" type="submit" name="like" value="dislike">
             <img class="icon" src="/static/images/thumbs-down.png" />
           </button>
         </form>
@@ -58,8 +61,12 @@
     <script>
       const logOutEl = document.getElementById("logOut");
       const deletionForms = document.querySelectorAll(".del-form");
+      const thisUsername = document.getElementById("thisUsername");
+      thisUsername.value = username.textContent;
+
       if (username.textContent === window.location.href.split("/art/")[1]) {
         logOutEl.hidden = false;
+
         deletionForms.forEach((form) => {
           form.hidden = false;
         });

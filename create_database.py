@@ -10,8 +10,6 @@ if __name__ == "__main__":
         "author": [],
         "date_created": [],
         "prompt": [],
-        "likes": [],
-        "dislikes": [],
         "palette": [],
     }
     art_df = pd.DataFrame(art_data)
@@ -21,8 +19,8 @@ if __name__ == "__main__":
     user_df = pd.DataFrame(user_data)
     user_df.to_sql("users", con=USERS_DATABASE, if_exists="replace", index=False)
 
-    interaction_data = {"username": [], "art": [], "liked": []}
-    interaction_df = pd.DataFrame(user_data)
+    interaction_data = {"username": [], "prompt": [], "author": [], "liked": []}
+    interaction_df = pd.DataFrame(interaction_data)
     interaction_df.to_sql(
         "interactions", con=INTERACTIONS_DATABASE, if_exists="replace", index=False
     )
