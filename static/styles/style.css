@@ -32,9 +32,11 @@
   --pico-primary: #5f8cf8 !important;
   --pico-primary-background: #3860c8 !important;
   --pico-primary-underline: #6e99fe !important;
-  --pico-primary-hover: #a2bdf7 !important;
+  --pico-primary-hover: #fff !important;
+  --pico-primary-hover-background: #4a77eb !important;
   --pico-primary-focus: #4a77eb !important;
   --pico-primary-inverse: #fff !important;
+  --pico-transition-duration: 200ms;
 
   --canvas-background: #cad9e8;
   --canvas-background-dark: #dae9f8;
@@ -47,11 +49,15 @@ h1,
   font-family: var(--font-display);
   font-weight: normal;
   letter-spacing: 0;
+  transition-property: font-size;
+  transition-duration: var(--pico-transition-duration);
 }
 
 h2,
 h3 {
   font-weight: 800 !important;
+  text-transform: uppercase;
+  letter-spacing: -2%;
 }
 
 button,
@@ -59,6 +65,7 @@ a,
 label,
 input {
   font-weight: 700 !important;
+  letter-spacing: 3%;
 }
 
 i {
@@ -205,7 +212,7 @@ i {
 }
 
 .gallery-canvas-container .gallery-canvas-link .gallery-canvas {
-  min-width: 20rem;
+  width: 100%;
   image-rendering: pixelated;
   border: 1px solid var(--pico-primary-inverse);
 }
@@ -250,6 +257,7 @@ i {
   display: flex;
   padding: var(--pico-form-element-spacing-vertical);
   text-decoration: none;
+  text-transform: uppercase;
 }
 
 .button-style {
@@ -270,6 +278,9 @@ i {
   position: relative;
   background-color: var(--pico-default-background-color);
   transition-property: transform;
+  transition-duration: var(--pico-transition-duration);
+  max-width: 16rem;
+  width: 50%;
 }
 
 .gallery-canvas-link:hover {
@@ -281,30 +292,50 @@ i {
 .prompt-small {
   opacity: 0;
   transition-property: opacity;
+  transition-duration: var(--pico-transition-duration);
+  font-size: 1rem;
+  background-color: var(--pico-primary-background);
+  padding: calc(var(--pico-spacing) / 2);
+  text-decoration: none !important;
+  border: none;
+  position: absolute;
+  color: var(--pico-default-color);
+  pointer-events: none;
 }
 
 .username-small {
-  right: calc(var(--pico-spacing) / 2);
-  top: calc(var(--pico-spacing) / 2);
-  line-height: 0.8;
-  position: absolute;
-  color: white;
-  text-decoration: none !important;
-  border: none;
-  font-size: 33px;
-  filter: drop-shadow(1px 1px 4px black);
+  bottom: 100%;
+  margin: 0.5rem 0;
 }
 
 .prompt-small {
-  left: calc(var(--pico-spacing) / 2);
-  bottom: calc(var(--pico-spacing) / 2);
-  margin-bottom: calc(-1 * var(--pico-spacing) / 2);
-  position: absolute;
-  color: white;
-  text-decoration: none !important;
-  border: none;
-  font-size: 33px;
-  filter: drop-shadow(1px 1px 4px black);
+  top: 100%;
+  margin: calc(var(--pio-spacing) / 2) 0;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 960px) {
+  .hero {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.hero-text {
+  width: max-content;
+  flex-shrink: 0;
+}
+
+.hero-image {
+  min-width: 0;
+  max-width: 50%;
+  flex-shrink: 1;
+  align-self: center;
+  margin: var(--pico-spacing) 0;
 }
 
 .gallery-canvas-link .likes-count {
@@ -322,6 +353,10 @@ i {
 .gallery-canvas-link:hover .username-small,
 .gallery-canvas-link:hover .prompt-small {
   opacity: 1;
+}
+
+.gallery-canvas-link:hover .likes-count {
+  font-size: 1rem;
 }
 
 #drawingCanvas {

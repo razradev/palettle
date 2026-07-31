@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,13 +11,23 @@
   <body>
     {% include '_navbar.html' %}
     <main class="container">
-      <article>
-        <h2>Make Art - One Pixel at a Time.</h2>
-        <p>Every day you get a new prompt and palette. Draw something great.</p>
-        <a class="button-style" href="/sign-up" style="width: max-content"
-          >Start Drawing<span style="width: 0.5rem"></span><i>&#xEA6C;</i></a
-        >
-      </article>
+      <section class="hero">
+        <div class="hero-text">
+          <h2>
+            Pixel by <span class="pixel-font">Pixel</span>.<br />
+            Make Art.
+          </h2>
+          <p>
+            Every day you get a new prompt and palette.<br />Draw something
+            cool.
+          </p>
+          <a class="button-style" href="/sign-up" style="width: max-content"
+            >Start Drawing<span style="width: 0.5rem"></span><i>&#xEA6C;</i></a
+          >
+        </div>
+        <img class="hero-image" src="/static/images/palettle.gif" />
+      </section>
+      <div style="height: calc(2 * var(--pico-spacing))"></div>
       <article>
         <a href="/gallery" style="text-decoration: none">
           <h2>
