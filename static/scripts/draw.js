@@ -28,6 +28,7 @@ const Tool = Object.freeze({
   Fill: 2,
 });
 let currentTool = Tool.Draw;
+const tools = document.querySelectorAll("#draw, #erase, #fill");
 
 // Current drawing color
 let currentColor = palette[0];
@@ -280,6 +281,24 @@ window.addEventListener("keydown", (event) => {
       isInputDown.undo = true;
       undo();
     }
+  }
+
+  switch (event.key) {
+    case "b":
+      setTool(Tool.Draw);
+      tools.forEach((t) => (t.checked = false));
+      tools[Tool.Draw].checked = true;
+      break;
+    case "e":
+      setTool(Tool.Erase);
+      tools.forEach((t) => (t.checked = false));
+      tools[Tool.Erase].checked = true;
+      break;
+    case "g":
+      setTool(Tool.Fill);
+      tools.forEach((t) => (t.checked = false));
+      tools[Tool.Fill].checked = true;
+      break;
   }
 });
 
